@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  nama      String
+  createdAt DateTime @default(now())
+}
+
+model Paket {
+  id               Int          @id @default(autoincrement())
+  nama             String
+  jenis            String       // "Umroh Reguler" | "Umroh Plus" | "Haji Furoda"
+  harga            Int
+  deskripsi        String       @db.Text
+  tanggalBerangkat DateTime
+  durasi           Int          // dalam hari
+  maskapai         String
+  rute             String       // e.g. "Jakarta - Jeddah"
+  kuotaTotal       Int
+  kuotaTerisi      Int          @default(0)
+  gambarUrl        String?
+  fasilitas        String[]     // array string, e.g. ["Hotel Bintang 4", "Visa Umroh"]
+  isActive         Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  jamaah           Jamaah[]
+}
+
+model Jamaah {
+  id         Int          @id @default(autoincrement())
+  nama       String
+  email      String       @unique
+  noHp       String
+  paketId    Int
+  paket      Paket        @relation(fields: [paketId], references: [id])
+  pembayaran Pembayaran[]
+  createdAt  DateTime     @default(now())
+}
+
+model Pembayaran {
+  id        Int              @id @default(autoincrement())
+  jamaahId  Int
+  jamaah    Jamaah           @relation(fields: [jamaahId], references: [id])
+  jumlah    Int
+  status    StatusPembayaran @default(PENDING)
+  tanggal   DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+enum StatusPembayaran {
+  PENDING
+  LUNAS
+  BATAL
+}
+
+model Testimoni {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  peran     String   // e.g. "Jamaah Umroh 2023"
+  pesan     String   @db.Text
+  rating    Int      @default(5)
+  gambarUrl String?
+  createdAt DateTime @default(now())
+}
+
+model Galeri {
+  id          Int      @id @default(autoincrement())
+  judul       String
+  deskripsi   String?  @db.Text
+  gambarUrl   String
+  kategori    String?  // e.g. "Umroh", "Haji", "Wisata"
+  createdAt   DateTime @default(now())
+}
