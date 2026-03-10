@@ -1,0 +1,131 @@
+/* ===== Folder Component CSS ===== */
+.folder {
+  --folder-color: #5227FF;
+  --folder-back-color: #4a22e8;
+  --paper-1: #e8e8e8;
+  --paper-2: #f0f0f0;
+  --paper-3: #ffffff;
+  position: relative;
+  width: 120px;
+  height: 90px;
+  cursor: pointer;
+  user-select: none;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.folder:hover {
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.5));
+  transform: translateY(-4px);
+}
+
+.folder__back {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 82%;
+  background: var(--folder-back-color);
+  border-radius: 0 8px 8px 8px;
+}
+
+.folder__back::before {
+  content: '';
+  position: absolute;
+  top: -18px;
+  left: 0;
+  width: 45%;
+  height: 20px;
+  background: var(--folder-back-color);
+  border-radius: 8px 8px 0 0;
+}
+
+/* Papers inside the folder */
+.paper {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 80%;
+  border-radius: 6px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paper-1 {
+  background: var(--paper-1);
+  z-index: 2;
+}
+
+.paper-2 {
+  background: var(--paper-2);
+  z-index: 3;
+}
+
+.paper-3 {
+  background: var(--paper-3);
+  z-index: 4;
+}
+
+/* Open state - papers spread out */
+.folder.open .paper-1 {
+  transform: translateX(calc(-50% - 40px - var(--magnet-x, 0px))) translateY(calc(-60px - var(--magnet-y, 0px))) rotate(-15deg);
+}
+
+.folder.open .paper-2 {
+  transform: translateX(calc(-50% + var(--magnet-x, 0px))) translateY(calc(-70px - var(--magnet-y, 0px))) rotate(0deg);
+}
+
+.folder.open .paper-3 {
+  transform: translateX(calc(-50% + 40px + var(--magnet-x, 0px))) translateY(calc(-60px - var(--magnet-y, 0px))) rotate(15deg);
+}
+
+/* Folder front flaps */
+.folder__front {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 82%;
+  background: var(--folder-color);
+  border-radius: 0 8px 8px 8px;
+  z-index: 5;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: bottom center;
+}
+
+.folder__front.right {
+  z-index: 6;
+  width: 55%;
+  border-radius: 0 8px 8px 0;
+  left: auto;
+  right: 0;
+}
+
+.folder__front::before {
+  content: '';
+  position: absolute;
+  top: -18px;
+  left: 0;
+  width: 45%;
+  height: 20px;
+  background: var(--folder-color);
+  border-radius: 8px 8px 0 0;
+}
+
+.folder__front.right::before {
+  display: none;
+}
+
+/* Open state - front flaps open */
+.folder.open .folder__front {
+  transform: perspective(800px) rotateX(30deg) translateY(4px);
+}
+
+.folder.open .folder__front.right {
+  transform: perspective(800px) rotateX(30deg) translateY(4px);
+}
