@@ -36,7 +36,7 @@ export class PembayaranService {
           data: { kuotaTerisi: { increment: 1 } },
         });
       } else if (oldStatus === StatusPembayaran.LUNAS) {
-        // Jika sebelumnya lunas lalu dibatalkan/pending, kembalikan kuota
+        // Jika sebelumnya lunas lalu dibatalkan/pending, kembalikan kuotaa terisi
         await tx.paket.update({
           where: { id: pembayaran.jamaah.paketId },
           data: { kuotaTerisi: { decrement: 1 } },
